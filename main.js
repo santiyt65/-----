@@ -252,16 +252,16 @@ unlinkSync(`./MITSURISession/${files}`)
 
 function purgeSessionSB() {
 try {
-let listaDirectorios = readdirSync('./jadibts/');
+let listaDirectorios = readdirSync('./Mitsurijadibts/');
 let SBprekey = []
 listaDirectorios.forEach(directorio => {
-if (statSync(`./jadibts/${directorio}`).isDirectory()) {
-let DSBPreKeys = readdirSync(`./jadibts/${directorio}`).filter(fileInDir => {
+if (statSync(`./Mitsurijadibts/${directorio}`).isDirectory()) {
+let DSBPreKeys = readdirSync(`./Mitsurijadibts/${directorio}`).filter(fileInDir => {
 return fileInDir.startsWith('pre-key-') /*|| fileInDir.startsWith('app-') || fileInDir.startsWith('session-')*/
 })
 SBprekey = [...SBprekey, ...DSBPreKeys]
 DSBPreKeys.forEach(fileInDir => {
-unlinkSync(`./jadibts/${directorio}/${fileInDir}`)
+unlinkSync(`./Mitsurijadibts/${directorio}/${fileInDir}`)
 })
 }
 })
@@ -271,7 +271,7 @@ console.log(chalk.bold.red(`=> Algo salio mal durante la eliminación, archivos 
 }}
 
 function purgeOldFiles() {
-const directories = ['./MITSURISession/', './jadibts/']
+const directories = ['./MITSURISession/', './Mitsurijadibts/']
 const oneHourAgo = Date.now() - (60 * 60 * 1000)
 directories.forEach(dir => {
 readdirSync(dir, (err, files) => {
