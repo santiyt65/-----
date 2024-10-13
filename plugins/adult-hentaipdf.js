@@ -1,9 +1,15 @@
 import fetch from 'node-fetch';
 import PDFDocument from 'pdfkit';
-import {extractImageThumb} from '@whiskeysockets/baileys';
+import {extractImageThumb} from "baileys";
+
 const handler = async (m, {conn, text, usedPrefix, command, args}) => {
-  if (!db.data.chats[m.chat].modohorny && m.isGroup) throw '*[❗𝐈𝐍𝐅𝐎❗] ℒ𝓐 ℬ𝓘ℬℒ𝓘𝓐 𝓝𝓞 𝓢𝓔 𝓟𝓤𝓔𝓓𝓔 ℒ𝓔𝓔ℛ 𝓔𝓝 𝓔𝓢𝓣𝓔 𝓖ℛ𝓤𝓟𝓞, 𝓢𝓘 𝓔ℛ𝓔𝓢 𝓐𝓓ℳ𝓘𝓝 𝓨 𝓠𝓤𝓘𝓔ℛ𝓔 𝓐𝓒𝓣𝓘𝓥𝓐ℛℒ𝓞𝓢 𝓤𝓢𝓔 𝓔ℒ 𝓒𝓞ℳ𝓐𝓝𝓓𝓞 #enable modohorny*';
-  if (!text) throw `*[❗] 𝓲𝓷𝓰𝓻𝒆𝓼𝓪 𝒆𝓵 𝓷𝓸𝓶𝓫𝓻𝒆 𝓭𝒆 𝓪𝓵𝓰𝓾𝓷𝓪 𝓬𝓪𝓽𝒆𝓰𝓸𝓻𝓲𝓪 𝓭𝒆 𝓱𝒆𝓷𝓽𝓪𝓲, 𝒆𝓳𝒆𝓶𝓹𝓵𝓸: ${usedPrefix + command} miku*`;
+  const datas = global
+  const idioma = datas.db.data.users[m.sender].language
+  const _translate = JSON.parse(fs.readFileSync(`./src/languages/${idioma}.json`))
+  const tradutor = _translate.plugins.adult_hentaipdf
+
+  if (!db.data.chats[m.chat].modohorny && m.isGroup) throw tradutor.texto1;
+  if (!text) throw `${tradutor.texto2} ${usedPrefix + command} ${tradutor.texto2_1}`;
   try {
     m.reply(global.wait);
     const res = await fetch(`https://api.lolhuman.xyz/api/nhentaisearch?apikey=${lolkeysapi}&query=${text}`);
@@ -21,7 +27,7 @@ const handler = async (m, {conn, text, usedPrefix, command, args}) => {
     const imagepdf = await toPDF(pages);
     await conn.sendMessage(m.chat, {document: imagepdf, jpegThumbnail, fileName: data.title.english + '.pdf', mimetype: 'application/pdf'}, {quoted: m});
   } catch {
-    throw `*[❗] 𝓔ℛℛ𝓞ℛ, 𝓘𝓝𝓣𝓔𝓝𝓣𝓔 𝓒𝓞𝓝 𝓞𝓣ℛ𝓐 𝓒𝓐𝓣𝓔𝓖𝓞ℛ𝓘𝓐*`;
+    throw `${tradutor.texto3}`;
   }
 };
 handler.command = /^(hentaipdf)$/i;

@@ -1,13 +1,21 @@
-import uploadFile from '../lib/uploadFile.js';
-import uploadImage from '../lib/uploadImage.js';
+import uploadFile from '../src/libraries/uploadFile.js';
+import uploadImage from '../src/libraries/uploadImage.js';
+
+
 const handler = async (m) => {
+  const datas = global
+  const idioma = datas.db.data.users[m.sender].language
+  const _translate = JSON.parse(fs.readFileSync(`./src/languages/${idioma}.json`))
+  const tradutor = _translate.plugins.convertidor_tourl
+
+  
   const q = m.quoted ? m.quoted : m;
   const mime = (q.msg || q).mimetype || '';
-  if (!mime) throw '*🌵 Rᴇsᴘᴏɴᴅᴀ A Uɴᴀ Iᴍᴀɢᴇɴ O Uɴ Vɪᴅᴇᴏ Eʟ Cᴜᴀʟ Sᴇʀᴀ́ Cᴏɴᴠᴇʀᴛɪᴅᴏ Eɴ Eɴʟᴀᴄᴇ✨*';
+  if (!mime) throw `*${tradutor.texto1}*`;
   const media = await q.download();
   const isTele = /image\/(png|jpe?g|gif)|video\/mp4/.test(mime);
   const link = await (isTele ? uploadImage : uploadFile)(media);
-  m.reply(`*𝙴𝙽𝙻𝙰𝙲𝙴 𝙰 𝚂𝚄 𝙰𝚁𝙲𝙷𝙸𝚅𝙾:* ${link}`);
+  m.reply(`*${tradutor.texto2}* ${link}`);
 };
 handler.help = ['tourl <reply image>'];
 handler.tags = ['sticker'];

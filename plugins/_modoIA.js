@@ -1,5 +1,9 @@
 import fetch from 'node-fetch';
 import translate from '@vitalets/google-translate-api';
+ // Para configurar o idioma, na raiz do projeto altere o arquivo config.json
+  // Para configurar el idioma, en la raíz del proyecto, modifique el archivo config.json.
+  // To set the language, in the root of the project, modify the config.json file.
+  
 const handler = (m) => m;
 
 handler.before = async (m) => {
@@ -11,10 +15,10 @@ handler.before = async (m) => {
      if (/^.*false|disnable|(turn)?off|0/i.test(m.text)) return;
         let textodem = m.text;
         const name = mconn.conn.getName(m.sender)
-        const namedem = `${name || 'Sin Definir'}`
+        const namedem = `${name || 'Sin definir'}`
         const sytm = await fetch(`https://raw.githubusercontent.com/BrunoSobrino/TheMystic-Bot-MD/master/src/JSON/chatgpt_indicciones.txt`).then(v => v.text());
         const sistema1 = sytm.replace('@name', namedem)
-        const sistema2 = 'Tu seras Nigromante Bot - MD, un Bot de WhatsApp creado por sinombre913';
+        const sistema2 = 'Tu seras The Mystic - Bot - MD, un bot de WhatsApp creado por Bruno Sobrino';
         try {
         async function getOpenAIChatCompletion(texto) {
         const openaiAPIKey = global.openai_key;

@@ -1,6 +1,13 @@
 import fetch from 'node-fetch' 
+
+
 const handler = async (m, {conn, text, args}) => {   
-if (!args[0]) return conn.reply(m.chat, "*[🔎] 𝙸𝙽𝙶𝚁𝙴𝚂𝙴 𝙻𝙰 𝚄𝚁𝙻 𝙳𝙴 𝚄𝙽𝙰 𝙿𝙰𝙶𝙸𝙽𝙰*", m);  
+   const datas = global
+   const idioma = datas.db.data.users[m.sender].language
+   const _translate = JSON.parse(fs.readFileSync(`./src/languages/${idioma}.json`))
+   const tradutor = _translate.plugins.herramientas_ssweb
+
+if (!args[0]) return conn.reply(m.chat, tradutor.texto1, m);  
    try {
      const ss = await (await fetch(`https://image.thum.io/get/fullpage/${args[0]}`)).buffer();
         conn.sendFile(m.chat, ss, '', '', m);

@@ -1,7 +1,12 @@
 import axios from 'axios';
 import fetch from 'node-fetch';
 const handler = async (m, {command, conn}) => {
-  if (!db.data.chats[m.chat].modohorny && m.isGroup) throw '*[❗𝐈𝐍𝐅𝐎❗] ℒ𝓐 ℬ𝓘ℬℒ𝓘𝓐 𝓝𝓞 𝓢𝓔 𝓟𝓤𝓔𝓓𝓔 ℒ𝓔𝓔ℛ 𝓔𝓝 𝓔𝓢𝓣𝓔 𝓖ℛ𝓤𝓟𝓞, 𝓢𝓘 𝓔ℛ𝓔𝓢 𝓐𝓓ℳ𝓘𝓝 𝓨 𝓠𝓤𝓘𝓔ℛ𝓔 𝓐𝓒𝓣𝓘𝓥𝓐ℛℒ𝓞𝓢 𝓤𝓢𝓔 𝓔ℒ 𝓒𝓞ℳ𝓐𝓝𝓓𝓞 #enable modohorny*';
+  const datas = global
+    const idioma = datas.db.data.users[m.sender].language
+    const _translate = JSON.parse(fs.readFileSync(`./src/languages/${idioma}.json`))
+    const tradutor = _translate.plugins.adult_comandos
+
+  if (!db.data.chats[m.chat].modohorny && m.isGroup) throw tradutor.texto1;
 
   if (command == 'nsfwloli') {
     const res = (await axios.get(`https://raw.githubusercontent.com/BrunoSobrino/TheMystic-Bot-MD/master/src/JSON/nsfwloli.json`)).data;
@@ -28,9 +33,8 @@ const handler = async (m, {command, conn}) => {
   }
 
   if (command == 'nsfwcum') {
-    const res = (await axios.get(`https://raw.githubusercontent.com/BrunoSobrino/TheMystic-Bot-MD/master/src/JSON/nsfwcum.json`)).data;
-    const haha = await res[Math.floor(res.length * Math.random())];
-    conn.sendMessage(m.chat, {image: {url: haha}, caption: `_${command}_`.trim()}, {quoted: m});
+    const res = `${global.MyApiRestBaseUrl}/api/nsfw/nsfwcum&apikey=${global.MyApiRestApikey}`;
+    conn.sendMessage(m.chat, {image: {url: res}, caption: `_${command}_`.trim()}, {quoted: m});
   }
 
   if (command == 'nsfwero') {
@@ -110,9 +114,7 @@ const handler = async (m, {command, conn}) => {
   }
 
   if (command == 'pene') {
-    const resError = (await axios.get(`https://raw.githubusercontent.com/BrunoSobrino/TheMystic-Bot-MD/master/src/JSON/pene.json`)).data;
-    let res = await conn.getFile(`https://api-fgmods.ddns.net/api/nsfw/penis?apikey=fg-dylux`).data;
-    if (res == '' || !res || res == null) res = await resError[Math.floor(resError.length * Math.random())];
+    const res = `${global.MyApiRestBaseUrl}/api/adult/pene?apikey=${global.MyApiRestApikey}`;
     conn.sendMessage(m.chat, {image: {url: res}, caption: `_${command}_`.trim()}, {quoted: m});
   }
 

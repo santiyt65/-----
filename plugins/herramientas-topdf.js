@@ -1,8 +1,15 @@
-import uploadImage from '../lib/uploadImage.js';
+import uploadImage from '../src/libraries/uploadImage.js';
+
+
 const handler = async (m, {conn, text, usedPrefix, command, isOwner}) => {
+  const datas = global
+  const idioma = datas.db.data.users[m.sender].language
+  const _translate = JSON.parse(fs.readFileSync(`./src/languages/${idioma}.json`))
+  const tradutor = _translate.plugins.herramientas_topdf
+
   const q = m.quoted ? m.quoted : m;
   const mime = (q.msg || q).mimetype || '';
-  if (!mime) throw '*[❗] 𝚁𝙴𝚂𝙿𝙾𝙽𝙳𝙰 / 𝙴𝚃𝙸𝚀𝚄𝙴𝚃𝙴 𝙰 𝚄𝙽𝙰 𝙸𝙼𝙰𝙶𝙴𝙽*';
+  if (!mime) throw tradutor.texto1;
   const img = await q.download?.();
   const url = await uploadImage(img);
   const docname = text ? text : m.pushName || 'documento';

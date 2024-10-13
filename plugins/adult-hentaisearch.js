@@ -1,8 +1,15 @@
 import cheerio from 'cheerio';
 import axios from 'axios';
+
+
 const handler = async (m, {conn, text, __dirname, usedPrefix, command}) => {
-  if (!global.db.data.chats[m.chat].modohorny && m.isGroup) throw '*[❗𝐈𝐍𝐅𝐎❗] ℒ𝓐 ℬ𝓘ℬℒ𝓘𝓐 𝓝𝓞 𝓢𝓔 𝓟𝓤𝓔𝓓𝓔 ℒ𝓔𝓔ℛ 𝓔𝓝 𝓔𝓢𝓣𝓔 𝓖ℛ𝓤𝓟𝓞, 𝓢𝓘 𝓔ℛ𝓔𝓢 𝓐𝓓ℳ𝓘𝓝 𝓨 𝓠𝓤𝓘𝓔ℛ𝓔 𝓐𝓒𝓣𝓘𝓥𝓐ℛℒ𝓞𝓢 𝓤𝓢𝓔 𝓔ℒ 𝓒𝓞ℳ𝓐𝓝𝓓𝓞 #enable modohorny*';
-  if (!text) throw '*[❗] 𝓔𝓢𝓒ℛ𝓘ℬ𝓐 𝓔ℒ 𝓝𝓐ℳ𝓔 𝓓𝓔 𝓐ℒ𝓖𝓤𝓝 ℋ𝓔𝓝𝓣𝓐𝓘 𝓐 ℬ𝓤𝓢𝓒𝓐ℛ*';
+  const datas = global
+  const idioma = datas.db.data.users[m.sender].language
+  const _translate = JSON.parse(fs.readFileSync(`./src/languages/${idioma}.json`))
+  const tradutor = _translate.plugins.adult_hentaisearch
+
+  if (!global.db.data.chats[m.chat].modohorny && m.isGroup) throw `${tradutor.texto1}`;
+  if (!text) throw `${tradutor.texto2}`;
   const searchResults = await searchHentai(text);
   let teks = searchResults.result.map((v, i) => `
 ${i+1}. *_${v.title}_*
@@ -14,7 +21,7 @@ ${i+1}. *_${v.title}_*
     randomThumbnail = searchResults.result[randomIndex].thumbnail;
   } else {
     randomThumbnail = 'https://pictures.hentai-foundry.com/e/Error-Dot/577798/Error-Dot-577798-Zero_Two.png';
-    teks = '*[❗] 𝓝𝓞 𝓔𝓝𝓒𝓞𝓝𝓣ℛ𝓐ℳ𝓞𝓢 ℛ𝓔𝓢𝓤ℒ𝓣𝓐𝓓𝓞𝓢*';
+    teks = tradutor.texto3;
   }
   conn.sendFile(m.chat, randomThumbnail, 'error.jpg', teks, m);
 };

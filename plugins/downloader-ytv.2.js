@@ -1,31 +1,99 @@
-import {youtubedl, youtubedlv2} from '@bochilteam/scraper';
 import fetch from 'node-fetch';
-const handler = async (m, {conn, args}) => {
-  if (!args[0]) throw '*[❗𝐈𝐍𝐅𝐎❗] 𝙸𝙽𝚂𝙴𝚁𝚃𝙴 𝙴𝙻 𝙲𝙾𝙼𝙰𝙽𝙳𝙾 𝙼𝙰𝚂 𝙴𝙻 𝙴𝙽𝙻𝙰𝙲𝙴 / 𝙻𝙸𝙽𝙺 𝙳𝙴 𝚄𝙽 𝚅𝙸𝙳𝙴𝙾 𝙳𝙴 𝚈𝙾𝚄𝚃𝚄𝙱𝙴*';
-  await m.reply(`*_⏳𝘗𝘳𝘰𝘤𝘦𝘴𝘢𝘯𝘥𝘰 𝘝𝘪𝘥𝘦𝘰...⏳_*\n\n*◉ 𝘚𝘪 𝘌𝘭 𝘝𝘪𝘥𝘦𝘰 𝘕𝘰 𝘚𝘦 𝘌𝘯𝘷𝘪𝘢 𝘗𝘳𝘶𝘦𝘣𝘦 𝘓𝘰𝘴 𝘚𝘪𝘨𝘶𝘪𝘦𝘯𝘵𝘦𝘴 𝘊𝘰𝘮𝘢𝘯𝘥𝘰𝘴 #playdoc ᴏ #play.2 ᴏ #ytmp4doc ◉*`);
+import yts from 'yt-search';
+import axios from 'axios';
+import ytmp44 from '../src/libraries/ytmp44.js';
+
+let enviando = false;
+
+const handler = async (m, { conn, args }) => {
+  const datas = global;
+  const idioma = datas.db.data.users[m.sender].language;
+  const _translate = JSON.parse(fs.readFileSync(`./src/languages/${idioma}.json`));
+  const tradutor = _translate.plugins.downloader_yta_2;
+  const tradutorrr = _translate.plugins.downloader_ytv;  
+
+  if (!args[0]) return await conn.sendMessage(m.chat, { text: tradutor.texto1 }, { quoted: m });
+
+  if (enviando) return; 
+  enviando = true; 
+
+  const { key } = await conn.sendMessage(m.chat, { text: tradutorrr.texto5 }, { quoted: m });
+
+  const youtubeLink = args[0];
+
   try {
-    const qu = args[1] || '360';
-    const q = qu + 'p';
-    const v = args[0];
-    const yt = await youtubedl(v).catch(async (_) => await youtubedlv2(v));
-    const dl_url = await yt.video[q].download();
-    const ttl = await yt.title;
-    const size = await yt.video[q].fileSizeH;
-    const cap = `*◉—⌈📥 𝐘𝐎𝐔𝐓𝐔𝐁𝐄 𝐃𝐋 📥⌋—◉*\n❏ *𝚃𝙸𝚃𝚄𝙻𝙾:* ${ttl}\n❏ *𝙿𝙴𝚂𝙾:* ${size}\n  ❥ᰰຼ ⃟ᬽ៸Noel Niihashi ༒★»`.trim();
-    await await conn.sendMessage(m.chat, {document: {url: dl_url}, caption: cap, mimetype: 'video/mp4', fileName: ttl + `.mp4`}, {quoted: m});
-  } catch {
-    try {
-      const lolhuman = await fetch(`https://api.lolhuman.xyz/api/ytvideo2?apikey=${lolkeysapi}&url=${args[0]}`);
-      const lolh = await lolhuman.json();
-      const n = lolh.result.title || 'error';
-      const n2 = lolh.result.link;
-      const n3 = lolh.result.size;
-      const cap2 = `*◉—⌈📥 𝐘𝐎𝐔𝐓𝐔𝐁𝐄 𝐃𝐋 📥⌋—◉*\n❏ *𝚃𝙸𝚃𝚄𝙻𝙾:* ${n}\n❏ *𝙿𝙴𝚂𝙾:* ${n3}\n  ❥ᰰຼ ⃟ᬽ៸Noel Niihashi ༒★»`.trim();
-      await conn.sendMessage(m.chat, {document: {url: n2}, caption: cap2, mimetype: 'video/mp4', fileName: n + `.mp4`}, {quoted: m});
-    } catch {
-      await conn.reply(m.chat, '*[❗] 𝒆𝓵 𝓿𝓲𝓭𝒆𝓸 𝓷𝓸 𝓼𝒆 𝓹𝓾𝓭𝓸 𝓭𝒆𝓼𝓬𝓪𝓻𝓰𝓪𝓻*', m);
+    const yt_play = await yts(youtubeLink);
+    const { status, resultados, error } = await ytmp44(yt_play.all[0].url);
+    if (!status) {
+      throw new Error(error);
     }
+    const buff_vid = await getBuffer(resultados.descargar);
+    const fileSizeInBytes = buff_vid.byteLength;
+    const fileSizeInKB = fileSizeInBytes / 1024;
+    const fileSizeInMB = fileSizeInKB / 1024;
+    const size = fileSizeInMB.toFixed(2);
+    const title = resultados.titulo;
+    const cap = `${tradutor.texto3[0]} ${title}\n${tradutor.texto3[1]}  ${size} MB`.trim();
+    await conn.sendMessage(m.chat, { document: buff_vid, caption: cap, mimetype: 'video/mp4', fileName: `${title}.mp4` }, { quoted: m });
+    await conn.sendMessage(m.chat, { text: tradutorrr.texto7[2], edit: key }, { quoted: m });
+    enviando = false;
+  } catch (error) {
+    try {
+      const yt_search = await yts(youtubeLink);
+      const videoUrl = `${global.MyApiRestBaseUrl}/api/v1/ytmp4?url=${yt_search.all[0].url}&apikey=${global.MyApiRestApikey}`;
+      const buff_vid = await getBuffer(videoUrl);
+      const fileSizeInBytes = buff_vid.byteLength;
+      const fileSizeInKB = fileSizeInBytes / 1024;
+      const fileSizeInMB = fileSizeInKB / 1024;
+      const size = fileSizeInMB.toFixed(2);
+      const title = yt_search.all[0].title;
+      const cap = `${tradutor.texto3[0]} ${title}\n${tradutor.texto3[1]}  ${size} MB`.trim();
+      await conn.sendMessage(m.chat, { document: buff_vid, caption: cap, mimetype: 'video/mp4', fileName: `${title}.mp4` }, { quoted: m });
+      await conn.sendMessage(m.chat, { text: tradutorrr.texto5[4], edit: key }, { quoted: m });
+      enviando = false;
+    } catch (error) {
+      try {
+        const yt_search = await yts(youtubeLink);
+        const videoUrl = `${global.MyApiRestBaseUrl}/api/v2/ytmp4?url=${yt_search.all[0].url}&apikey=${global.MyApiRestApikey}`;
+        const buff_vid = await getBuffer(videoUrl);
+        const fileSizeInBytes = buff_vid.byteLength;
+        const fileSizeInKB = fileSizeInBytes / 1024;
+        const fileSizeInMB = fileSizeInKB / 1024;
+        const size = fileSizeInMB.toFixed(2);
+        const title = yt_search.all[0].title;
+        const cap = `${tradutor.texto3[0]} ${title}\n${tradutor.texto3[1]}  ${size} MB`.trim();
+        await conn.sendMessage(m.chat, { document: buff_vid, caption: cap, mimetype: 'video/mp4', fileName: `${title}.mp4` }, { quoted: m });
+        await conn.sendMessage(m.chat, { text: tradutorrr.texto5[4], edit: key }, { quoted: m });
+        enviando = false;
+      } catch (error) {
+        enviando = false;
+        await conn.sendMessage(m.chat, { text: tradutorrr.texto7[2], edit: key }, { quoted: m });
+      }
+    }
+  } finally {
+    enviando = false; 
   }
 };
-handler.command = /^ytmp4doc|ytvdoc|ytmp4.2|ytv.2$/i;
+
+handler.command = /^(ytmp4doc|ytvdoc|ytmp4.2|ytv.2)$/i;
 export default handler;
+
+const getBuffer = async (url, options) => {
+  try {
+    options ? options : {};
+    const res = await axios({
+      method: 'get',
+      url,
+      headers: {
+        'DNT': 1,
+        'Upgrade-Insecure-Request': 1,
+      },
+      ...options,
+      responseType: 'arraybuffer',
+    });
+    return res.data;
+  } catch (e) {
+    console.log(`Error : ${e}`);
+    throw e;  
+  }
+};

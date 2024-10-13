@@ -1,17 +1,24 @@
 import fetch from 'node-fetch';
 import {sizeFormatter} from 'human-readable';
+
 const formatSize = sizeFormatter({
   std: 'JEDEC', decimalPlaces: 2, keepTrailingZeroes: false, render: (literal, symbol) => `${literal} ${symbol}B`});
-const handler = async (m, {conn, args}) => {
-  if (!args[0]) throw '*[❗𝐈𝐍𝐅𝐎❗] 𝙴𝚁𝚁𝙾𝚁, 𝙿𝙾𝚁 𝙵𝙰𝚅𝙾𝚁 𝚅𝚄𝙴𝙻𝚅𝙰 𝙰 𝙸𝙽𝚃𝙴𝙽𝚃𝙰𝚁𝙻𝙾*\n\n*- 𝙲𝙾𝚁𝚁𝙾𝙱𝙾𝚁𝙴 𝚀𝚄𝙴 𝙴𝙻 𝙴𝙽𝙻𝙰𝙲𝙴 𝚂𝙴𝙰 𝚂𝙸𝙼𝙸𝙻𝙰𝚁 𝙰:*\n*◉ https://drive.google.com/file/d/1dmHlx1WTbH5yZoNa_ln325q5dxLn1QHU/view*';
+
+const handler = async (m, {conn, args, usedPrefix, command}) => {
+  const datas = global
+  const idioma = datas.db.data.users[m.sender].language
+  const _translate = JSON.parse(fs.readFileSync(`./src/languages/${idioma}.json`))
+  const tradutor = _translate.plugins.descargas_gdrive
+
+  if (!args[0]) throw `${tradutor.texto1} _${usedPrefix + command} https://drive.google.com/file/d/1dmHlx1WTbH5yZoNa_ln325q5dxLn1QHU/view_`;
   try {
     GDriveDl(args[0]).then(async (res) => {
-      conn.reply(m.chat, '𝐷𝑒𝑠𝑐𝑎𝑟𝑔𝑎𝑛𝑑𝑜 𝑠𝑢 𝑎𝑟𝑐ℎ𝑖𝑣𝑜, 𝑒𝑠𝑝𝑒𝑟𝑒 𝑢𝑛 𝑚𝑜𝑚𝑒𝑛𝑡𝑜...\n\n𝐸𝑙 𝑡𝑖𝑒𝑚𝑝𝑜 𝑑𝑒 𝑒𝑠𝑝𝑒𝑟𝑎 𝑝𝑢𝑒𝑑𝑒 𝑣𝑎𝑟𝑖𝑎𝑟 𝑑𝑒𝑝𝑒𝑛𝑑𝑖𝑒𝑛𝑑𝑜 𝑑𝑒𝑙 𝑝𝑒𝑠𝑜 𝑑𝑒𝑙 𝑎𝑟𝑐ℎ𝑖𝑣𝑜, 𝑠𝑖 𝑒𝑙 𝑝𝑒𝑠𝑜 𝑠𝑢𝑝𝑒𝑟𝑎 𝑙𝑜𝑠 100 𝑀𝐵 𝑝𝑢𝑒𝑑𝑒 𝑞𝑢𝑒 𝑠𝑢 𝑎𝑟𝑐ℎ𝑖𝑣𝑜 𝑛𝑜 𝑠𝑒𝑎 𝑒𝑛𝑣𝑖𝑎𝑑𝑜', m);
+      conn.reply(m.chat, tradutor.texto2, m);
       if (!res) throw res;
       conn.sendFile(m.chat, res.downloadUrl, res.fileName, '', m, null, {mimetype: res.mimetype, asDocument: true});
     });
   } catch (e) {
-    m.reply('*[❗𝐈𝐍𝐅𝐎❗] 𝙴𝚁𝚁𝙾𝚁, 𝙿𝙾𝚁 𝙵𝙰𝚅𝙾𝚁 𝚅𝚄𝙴𝙻𝚅𝙰 𝙰 𝙸𝙽𝚃𝙴𝙽𝚃𝙰𝚁𝙻𝙾*\n\n*- 𝙲𝙾𝚁𝚁𝙾𝙱𝙾𝚁𝙴 𝚀𝚄𝙴 𝙴𝙻 𝙴𝙽𝙻𝙰𝙲𝙴 𝚂𝙴𝙰 𝚂𝙸𝙼𝙸𝙻𝙰𝚁 𝙰:*\n*◉ https://drive.google.com/file/d/1dmHlx1WTbH5yZoNa_ln325q5dxLn1QHU/view*');
+    m.reply(tradutor.texto3);
     console.log(e);
   }
 };

@@ -18,14 +18,22 @@ import {join} from 'path';
 import axios from 'axios';
 import translate from '@vitalets/google-translate-api';
 import {Configuration, OpenAIApi} from 'openai';
+
 const configuration = new Configuration({organization: global.openai_org_id, apiKey: global.openai_key});
 const openaiii = new OpenAIApi(configuration);
 const idioma = 'es'
 //const sistema1 = await fetch(`https://raw.githubusercontent.com/Skidy89/chat-gpt-jailbreak/main/Text.txt`).then(v => v.text());
-const sistema1 = `Actuaras como un Bot de WhatsApp el cual fue creado por BrunoSobrino, tu seras The Mystic - Bot.`;
+
 const handler = async (m, {conn, text, usedPrefix, command}) => {
+  const datas = global
+  const idioma = datas.db.data.users[m.sender].language
+  const _translate = JSON.parse(fs.readFileSync(`./src/languages/${idioma}.json`))
+  const tradutor = _translate.plugins.herramientas_chatgptvoz
+
+  const sistema1 = tradutor.texto2;
+
   if (usedPrefix == 'a' || usedPrefix == 'A') return;
-  if (!text) throw `*[❗] 𝙸𝙽𝙶𝚁𝙴𝚂𝙴 𝚄𝙽𝙰 𝙿𝙴𝚃𝙸𝙲𝙸𝙾𝙽 𝙾 𝚄𝙽𝙰 𝙾𝚁𝙳𝙴𝙽 𝙿𝙰𝚁𝙰 𝚄𝚂𝙰𝚁 𝙻𝙰 𝙵𝚄𝙽𝙲𝙸𝙾𝙽 𝙳𝙴 𝙲𝙷𝙰𝚃𝙶𝙿𝚃*\n\n*—◉ 𝙴𝙹𝙴𝙼𝙿𝙻𝙾𝚂 𝙳𝙴 𝙿𝙴𝚃𝙸𝙲𝙸𝙾𝙽𝙴𝚂 𝚈 𝙾𝚁𝙳𝙴𝙽𝙴𝚂*\n*◉ ${usedPrefix + command} Reflexion sobre la serie Merlina 2022 de netflix*\n*◉ ${usedPrefix + command} Codigo en JS para un juego de cartas*`;
+  if (!text) throw `${tradutor.texto1[0]} ${usedPrefix + command} ${tradutor.texto1[1]} ${usedPrefix + command} ${tradutor.texto1[2]}`;
   try {
         conn.sendPresenceUpdate('composing', m.chat);
         async function getOpenAIChatCompletion(texto) {
@@ -124,7 +132,7 @@ const handler = async (m, {conn, text, usedPrefix, command}) => {
         const audio10 = await tts(akuariapiresult1.text, idioma);
         await conn.sendMessage(m.chat, {audio: audio10, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m});                           
     } catch {
-        throw `*[❗] 𝙴𝚁𝚁𝙾𝚁, 𝚅𝚄𝙴𝙻𝚅𝙰 𝙰 𝙸𝙽𝚃𝙴𝙽𝚃𝙰𝚁𝙻𝙾*`;
+        throw tradutor.texto3;
      }}
     }}
    }}
@@ -138,7 +146,7 @@ async function tts(text = 'error', lang = 'es') {
   return new Promise((resolve, reject) => {
     try {
       const tts = gtts(lang);
-      const filePath = join(global.__dirname(import.meta.url), '../tmp', (1 * new Date) + '.wav');
+      const filePath = join(global.__dirname(import.meta.url), '../src/tmp', (1 * new Date) + '.wav');
       tts.save(filePath, text, () => {
         resolve(readFileSync(filePath));
         unlinkSync(filePath);

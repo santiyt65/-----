@@ -1,9 +1,15 @@
+
 const handler = async (m) => {
-  global.db.data.chats[m.chat].isBanned = false;
-  m.reply('*👊Esᴛᴇ Cʜᴀᴛ Yᴀ Esᴛᴀ Dᴇsʙᴀɴᴇᴀᴅᴏ, Pᴜᴇᴅᴇɴ Usᴀʀᴍᴇ*');
-};
-handler.help = ['unbanchat'];
-handler.tags = ['owner'];
-handler.command = /^unbanchat$/i;
-handler.rowner = true;
-export default handler;
+    const datas = global
+    const idioma = datas.db.data.users[m.sender].language
+    const _translate = JSON.parse(fs.readFileSync(`./language/${idioma}.json`))
+    const tradutor = _translate.plugins.owner_unbanchat
+  
+    global.db.data.chats[m.chat].isBanned = false;
+    m.reply(tradutor.texto1);
+  };
+  handler.help = ['unbanchat'];
+  handler.tags = ['owner'];
+  handler.command = /^unbanchat$/i;
+  handler.rowner = true;
+  export default handler;

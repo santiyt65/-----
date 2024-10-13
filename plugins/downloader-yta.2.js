@@ -1,30 +1,99 @@
-import {youtubedl, youtubedlv2} from '@bochilteam/scraper';
 import fetch from 'node-fetch';
-const handler = async (m, {conn, args}) => {
-  if (!args[0]) throw '*[❗𝐈𝐍𝐅𝐎❗] 𝙸𝙽𝚂𝙴𝚁𝚃𝙴 𝙴𝙻 𝙲𝙾𝙼𝙰𝙽𝙳𝙾 𝙼𝙰𝚂 𝙴𝙻 𝙴𝙽𝙻𝙰𝙲𝙴 / 𝙻𝙸𝙽𝙺 𝙳𝙴 𝚄𝙽 𝚅𝙸𝙳𝙴𝙾 𝙳𝙴 𝚈𝙾𝚄𝚃𝚄𝙱𝙴*';
-  await m.reply(`*_⏳𝘈𝘶𝘥𝘪𝘰 𝘗𝘳𝘰𝘤𝘦𝘴𝘢𝘯𝘥𝘰...⏳_*\n\n*◉ 𝓼Sɪ Eʟ Aᴜᴅɪᴏ Nᴏ Sᴇ Lᴇ Eɴᴠɪᴀ Pʀᴜᴇʙᴇ Lᴏs Sɪɢᴜɪᴇɴᴛᴇs Cᴏᴍᴀɴᴅᴏs #playdoc ᴏ #play.2 ᴏ #ytmp4doc ◉*`);
+import yts from 'yt-search';
+import axios from 'axios';
+import ytmp33 from '../src/libraries/ytmp33.js';
+
+let enviando = false;
+
+const handler = async (m, { conn, args }) => {
+  const datas = global;
+  const idioma = datas.db.data.users[m.sender].language;
+  const _translate = JSON.parse(fs.readFileSync(`./src/languages/${idioma}.json`));
+  const tradutor = _translate.plugins.downloader_yta_2;
+  const tradutorrr = _translate.plugins.downloader_yta;  
+
+  if (!args[0]) return await conn.sendMessage(m.chat, { text: tradutor.texto1 }, { quoted: m });
+
+  if (enviando) return;  
+  enviando = true; 
+
+  const { key } = await conn.sendMessage(m.chat, { text: tradutor.texto2 }, { quoted: m });
+
+  const youtubeLink = args[0];
+
   try {
-    const q = '128kbps';
-    const v = args[0];
-    const yt = await youtubedl(v).catch(async (_) => await youtubedlv2(v));
-    const dl_url = await yt.audio[q].download();
-    const ttl = await yt.title;
-    const size = await yt.audio[q].fileSizeH;
-    const cap = `*◉—⌈📥 𝐘𝐎𝐔𝐓𝐔𝐁𝐄 𝐃𝐋 📥⌋—◉*\n❏ *𝚃𝙸𝚃𝚄𝙻𝙾:* ${ttl}\n❏ *𝙿𝙴𝚂𝙾:* ${size}\n  ❥ᰰຼ ⃟ᬽ៸Noel Niihashi ༒★»`.trim();
-    await conn.sendMessage(m.chat, {document: {url: dl_url}, caption: cap, mimetype: 'audio/mpeg', fileName: `${ttl}.mp3`}, {quoted: m});
-  } catch {
-    try {
-      const lolhuman = await fetch(`https://api.lolhuman.xyz/api/ytaudio2?apikey=${lolkeysapi}&url=${args[0]}`);
-      const lolh = await lolhuman.json();
-      const n = lolh.result.title || 'error';
-      const n2 = lolh.result.link;
-      const n3 = lolh.result.size;
-      const cap2 = `*◉—⌈📥 𝐘𝐎𝐔𝐓𝐔𝐁𝐄 𝐃𝐋 📥⌋—◉*\n❏ *𝚃𝙸𝚃𝚄𝙻𝙾:* ${n}\n❏ *𝙿𝙴𝚂𝙾:* ${n3}\n  ❥ᰰຼ ⃟ᬽ៸Noel Niihashi ༒★» `.trim();
-      await conn.sendMessage(m.chat, {document: {url: n2}, caption: cap2, mimetype: 'audio/mpeg', fileName: `${n}.mp3`}, {quoted: m});
-    } catch {
-      await conn.reply(m.chat, '*[❗] 𝙴𝚁𝚁𝙾𝚁 𝙽𝙾 𝙵𝚄𝙴 𝙿𝙾𝚂𝙸𝙱𝙻𝙴 𝙳𝙴𝚂𝙲𝙰𝚁𝙶𝙰𝚁 𝙴𝙻 𝙰𝚄𝙳𝙸𝙾*', m);
+    const { status, resultados, error } = await ytmp33(youtubeLink);
+    if (!status) {
+      enviando = false; 
+      throw new Error(error);
     }
+    const buff_aud = await getBuffer(resultados.descargar);
+    const fileSizeInBytes = buff_aud.byteLength;
+    const fileSizeInKB = fileSizeInBytes / 1024;
+    const fileSizeInMB = fileSizeInKB / 1024;
+    const size = fileSizeInMB.toFixed(2);
+    const title = resultados.titulo;
+    const cap = `${tradutor.texto3[0]} ${title}\n${tradutor.texto3[1]}  ${size} MB`.trim();
+    await conn.sendMessage(m.chat, { document: buff_aud, caption: cap, mimetype: 'audio/mpeg', fileName: `${title}.mp3` }, { quoted: m });
+    await conn.sendMessage(m.chat, { text: tradutorrr.texto5[4], edit: key }, { quoted: m });
+    enviando = false;
+  } catch (error) {
+    try {
+      const yt_search = await yts(youtubeLink);
+      const audioUrl = `${global.MyApiRestBaseUrl}/api/v1/ytmp3?url=${yt_search.all[0].url}&apikey=${global.MyApiRestApikey}`;
+      const buff_aud = await getBuffer(audioUrl);
+      const fileSizeInBytes = buff_aud.byteLength;
+      const fileSizeInKB = fileSizeInBytes / 1024;
+      const fileSizeInMB = fileSizeInKB / 1024;
+      const size = fileSizeInMB.toFixed(2);
+      const title = yt_search.all[0].title;
+      const cap = `${tradutor.texto3[0]} ${title}\n${tradutor.texto3[1]}  ${size} MB`.trim();
+      await conn.sendMessage(m.chat, { document: buff_aud, caption: cap, mimetype: 'audio/mpeg', fileName: `${title}.mp3` }, { quoted: m });
+      await conn.sendMessage(m.chat, { text: tradutorrr.texto5[4], edit: key }, { quoted: m });
+      enviando = false;
+    } catch (error) {
+      try {
+        const yt_search = await yts(youtubeLink);
+        const audioUrl = `${global.MyApiRestBaseUrl}/api/v2/ytmp3?url=${yt_search.all[0].url}&apikey=${global.MyApiRestApikey}`;
+        const buff_aud = await getBuffer(audioUrl);
+        const fileSizeInBytes = buff_aud.byteLength;
+        const fileSizeInKB = fileSizeInBytes / 1024;
+        const fileSizeInMB = fileSizeInKB / 1024;
+        const size = fileSizeInMB.toFixed(2);
+        const title = yt_search.all[0].title;
+        const cap = `${tradutor.texto3[0]} ${title}\n${tradutor.texto3[1]}  ${size} MB`.trim();
+        await conn.sendMessage(m.chat, { document: buff_aud, caption: cap, mimetype: 'audio/mpeg', fileName: `${title}.mp3` }, { quoted: m });
+        await conn.sendMessage(m.chat, { text: tradutorrr.texto5[4], edit: key }, { quoted: m });
+        enviando = false;
+      } catch (error) {
+        enviando = false; 
+        await conn.sendMessage(m.chat, { text: tradutor.texto4, edit: key }, { quoted: m });
+      }
+    }
+  } finally {
+    enviando = false;  
   }
 };
-handler.command = /^ytmp3doc|ytadoc|ytmp3.2|yta.2$/i;
+
+handler.command = /^(ytmp3doc|ytadoc|ytmp3.2|yta.2)$/i;
 export default handler;
+
+const getBuffer = async (url, options) => {
+  try {
+    options ? options : {};
+    const res = await axios({
+      method: 'get',
+      url,
+      headers: {
+        'DNT': 1,
+        'Upgrade-Insecure-Request': 1,
+      },
+      ...options,
+      responseType: 'arraybuffer',
+    });
+    return res.data;
+  } catch (e) {
+    console.log(`Error : ${e}`);
+    throw e;  
+  }
+};

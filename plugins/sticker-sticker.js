@@ -3,7 +3,14 @@ import uploadFile from '../lib/uploadFile.js';
 import uploadImage from '../lib/uploadImage.js';
 import {webp2png} from '../lib/webp2mp4.js';
 
+
+
 const handler = async (m, {conn, args, usedPrefix, command}) => {
+  const datas = global
+  const idioma = datas.db.data.users[m.sender].language
+  const _translate = JSON.parse(fs.readFileSync(`./language/${idioma}.json`))
+  const tradutor = _translate.plugins.sticker_sticker
+
   if (usedPrefix == 'a' || usedPrefix == 'A') return;
   let stiker = false;
   const user = db.data.users[m.sender];
@@ -12,7 +19,7 @@ const handler = async (m, {conn, args, usedPrefix, command}) => {
     const mime = (q.msg || q).mimetype || q.mediaType || '';
     if (/webp|image|video/g.test(mime)) {
       const img = await q.download?.();
-      if (!img) throw `⚠️ *𝘏𝘦𝘺 𝘙𝘦𝘴𝘱𝘰𝘯𝘥𝘦 𝘊𝘰𝘯 𝘜𝘯𝘢 𝘐𝘮𝘢𝘨𝘦𝘯 𝘖 𝘜𝘯 𝘝𝘪𝘥𝘦𝘰, 𝘊𝘰𝘯 𝘌𝘭 𝘊𝘰𝘮𝘢𝘯𝘥𝘰 .𝘴 ${usedPrefix + command}*`;
+      if (!img) throw `${tradutor.texto1} ${usedPrefix + command}*`;
       let out;
       try {
         stiker = await sticker(img, false, global.packname, global.author);
@@ -29,14 +36,14 @@ const handler = async (m, {conn, args, usedPrefix, command}) => {
       }
     } else if (args[0]) {
       if (isUrl(args[0])) stiker = await sticker(false, args[0], global.packname, global.author);
-      else return m.reply('*[❗𝐈𝐍𝐅𝐎❗] 𝙴𝙻 𝙴𝙽𝙻𝙰𝙲𝙴 / 𝚄𝚁𝙻 / 𝙻𝙸𝙽𝙺 𝙽𝙾 𝙴𝚂 𝚅𝙰𝙻𝙸𝙳𝙰, 𝙻𝙰 𝚃𝙴𝚁𝙼𝙸𝙽𝙰𝙲𝙸𝙾𝙽 𝙳𝙴𝙻 𝙴𝙽𝙻𝙰𝙲𝙴 / 𝚄𝚁𝙻 / 𝙻𝙸𝙽𝙺 𝙳𝙴𝙱𝙴 𝚂𝙴𝚁 .𝚓𝚙𝚐, 𝙴𝙹𝙴𝙼𝙿𝙻𝙾: ${usedPrefix}s https://telegra.ph/file/0dc687c61410765e98de2.jpg*');
+      else return m.reply(`${tradutor.texto2} ${usedPrefix}s https://telegra.ph/file/0dc687c61410765e98de2.jpg*`);
     }
   } catch (e) {
     console.error(e);
     if (!stiker) stiker = e;
   } finally {
     if (stiker) conn.sendFile(m.chat, stiker, 'sticker.webp', '', m);
-    else throw '⚠️ *𝘏𝘦𝘺 𝘙𝘦𝘴𝘱𝘰𝘯𝘥𝘦 𝘊𝘰𝘯 𝘜𝘯𝘢 𝘐𝘮𝘢𝘨𝘦𝘯 𝘖 𝘜𝘯 𝘝𝘪𝘥𝘦𝘰, 𝘊𝘰𝘯 𝘌𝘭 𝘊𝘰𝘮𝘢𝘯𝘥𝘰 .𝘴*';
+   else return m.reply(`${tradutor.texto3}` + ` ${usedPrefix + command}*`);
   }
 };
 handler.help = ['sfull'];
@@ -76,7 +83,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
       stiker = await mp4ToWebp(img, { pack: packname || global.packname, author: author || global.author })
     } else if (args[0] && isUrl(args[0])) {
       stiker = await createstiker(false, args[0], '', author, 20)
-    } else throw `⚠️ *𝘏𝘦𝘺 𝘙𝘦𝘴𝘱𝘰𝘯𝘥𝘦 𝘊𝘰𝘯 𝘜𝘯𝘢 𝘐𝘮𝘢𝘨𝘦𝘯 𝘖 𝘜𝘯 𝘝𝘪𝘥𝘦𝘰, 𝘊𝘰𝘯 𝘌𝘭 𝘊𝘰𝘮𝘢𝘯𝘥𝘰 .𝘴 ${usedPrefix + command}*`
+    } else throw `*[❗𝐈𝐍𝐅𝐎❗] 𝚁𝙴𝚂𝙿𝙾𝙽𝙳𝙴 𝙰 𝚄𝙽 𝚅𝙸𝙳𝙴𝙾, 𝙸𝙼𝙰𝙶𝙴𝙽 𝙾 𝙸𝙽𝚂𝙴𝚁𝚃𝙴 𝙴𝙻 𝙴𝙽𝙻𝙰𝙲𝙴 𝙳𝙴 𝚄𝙽𝙰 𝙸𝙼𝙰𝙶𝙴𝙽 𝚃𝙴𝚁𝙼𝙸𝙽𝙰𝙲𝙸𝙾́𝙽 .𝚓𝚙𝚐 𝙴𝙻 𝙲𝚄𝙰𝙻 𝚂𝙴𝚁𝙰 𝙲𝙾𝙽𝚅𝙴𝚁𝚃𝙸𝙳𝙾 𝙴𝙽 𝚂𝚃𝙸𝙲𝙺𝙴𝚁, 𝙳𝙴𝙱𝙴 𝚁𝙴𝚂𝙿𝙾𝙽𝙳𝙴𝚁 𝙾 𝚄𝚂𝙰𝚁 𝙴𝙻 𝙲𝙾𝙼𝙰𝙽𝙳𝙾 ${usedPrefix + command}*`
   } catch (error) {
     console.log(error)
     try {
@@ -96,7 +103,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         throw `*[❗𝐈𝐍𝐅𝐎❗] 𝙴𝙻 𝙴𝙽𝙻𝙰𝙲𝙴 / 𝚄𝚁𝙻 / 𝙻𝙸𝙽𝙺 𝙽𝙾 𝙴𝚂 𝚅𝙰𝙻𝙸𝙳𝙰, 𝙻𝙰 𝚃𝙴𝚁𝙼𝙸𝙽𝙰𝙲𝙸𝙾𝙽 𝙳𝙴𝙻 𝙴𝙽𝙻𝙰𝙲𝙴 / 𝚄𝚁𝙻 / 𝙻𝙸𝙽𝙺 𝙳𝙴𝙱𝙴 𝚂𝙴𝚁 .𝚓𝚙𝚐, 𝙴𝙹𝙴𝙼𝙿𝙻𝙾: ${usedPrefix}s https://telegra.ph/file/0dc687c61410765e98de2.jpg*`
       }
     } catch (error) {
-      stiker = `⚠️ *𝘏𝘦𝘺 𝘙𝘦𝘴𝘱𝘰𝘯𝘥𝘦 𝘊𝘰𝘯 𝘜𝘯𝘢 𝘐𝘮𝘢𝘨𝘦𝘯 𝘖 𝘜𝘯 𝘝𝘪𝘥𝘦𝘰, 𝘊𝘰𝘯 𝘌𝘭 𝘊𝘰𝘮𝘢𝘯𝘥𝘰 .𝘴*`
+      stiker = `*[❗𝐈𝐍𝐅𝐎❗] 𝙾𝙲𝚄𝚁𝚁𝙸𝙾 𝚄𝙽 𝙴𝚁𝚁𝙾𝚁, 𝚅𝚄𝙴𝙻𝚅𝙰 𝙰 𝙸𝙽𝚃𝙴𝙽𝚃𝙰𝚁𝙻𝙾. 𝚁𝙴𝚂𝙿𝙾𝙽𝙳𝙴 𝙰 𝚄𝙽 𝚅𝙸𝙳𝙴𝙾, 𝙸𝙼𝙰𝙶𝙴𝙽 𝙾 𝙸𝙽𝚂𝙴𝚁𝚃𝙴 𝙴𝙻 𝙴𝙽𝙻𝙰𝙲𝙴 𝙳𝙴 𝚄𝙽𝙰 𝙸𝙼𝙰𝙶𝙴𝙽 𝚃𝙴𝚁𝙼𝙸𝙽𝙰𝙲𝙸𝙾́𝙽 .𝚓𝚙𝚐 𝙴𝙻 𝙲𝚄𝙰𝙻 𝚂𝙴𝚁𝙰 𝙲𝙾𝙽𝚅𝙴𝚁𝚃𝙸𝙳𝙾 𝙴𝙽 𝚂𝚃𝙸𝙲𝙺𝙴𝚁`
     }
   } finally {
     m.reply(stiker)
