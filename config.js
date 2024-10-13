@@ -2,40 +2,48 @@ import {watchFile, unwatchFile} from 'fs';
 import chalk from 'chalk';
 import {fileURLToPath} from 'url';
 import fs from 'fs'; 
-import cheerio from 'cheerio';
-import fetch from 'node-fetch';
-import axios from 'axios';
 import moment from 'moment-timezone';
-import { es } from "./lib/idiomas/total-idiomas.js"
-
 
 global.botnumber = ""
+global.confirmCode = ""
+global.authFile = `MysticSession`;
+
+// Cambiar a true si el Bot responde a sus comandos con otros comandos.
+// Cambiar a false para usar el Bot desde el mismo numero del Bot.
+// Error de m.isBaileys marcado como false fix temporal
+global.isBaileysFail = false
+
+global.defaultLenguaje = 'es';
 
 global.owner = [
-  ['+54 260 403-5392', '👑 - Creador 👑', true],
+  ['+54 260 403 53-92', '👑 ninja - Creador 👑', true],
 ];
 
-global.suittag = ['5213339577315'];
-global.prems = ['5213331199136'];
+global.suittag = ['5219993404349'];
+global.prems = ['51995386439'];
 
-global.lenguajeSK = es //idioma de bot
+// API
+global.BASE_API_DELIRIUS = "https://deliriusapi-official.vercel.app";
 
-global.packname = 'MITSURI EDGAR';
-global.author = 'MITSURI EDGAR';
-global.wm = 'MITSURI EDGAR';
-global.titulowm = 'H Bot EDGAR';
-global.titulowm2 = 'H Bot EDGAR'
-global.igfg = 'SANTIYT65';
-global.wait = '*⏳️ Cargando Espere Un Momento...*';
-global.msg = 'BOT MITSURI EDGAR\n'
+global.packname = 'Sticker';
+global.author = 'MITSURI-BOT-MD';
+global.wm = 'MITSURI-BOT-MD';
+global.titulowm = 'MITSURI-BOT-MD';
+global.titulowm2 = `MITSURI-BOT-MD`
+global.igfg = 'MITSURI-BOT-MD';
+global.wait = '*_[ ⏳ ] Cargando..._*';
 
-global.imagen1 = fs.readFileSync('./Menu2.jpg');
-global.imagen2 = fs.readFileSync('./src/nuevobot.jpg');
-global.imagen3 = fs.readFileSync('./src/Pre Bot Publi.png');
-global.imagen4 = fs.readFileSync('./Menu.png');
-global.imagen5 = fs.readFileSync('./src/+18.jpg');
-global.imagen6 = fs.readFileSync('./Menu3.png');
-global.imagen7 = fs.readFileSync('./Menu4.jpg');
+/*global.imagen1 = fs.createReadStream('./src/menu_es.png');
+global.imagen2 = fs.createReadStream('./src//menu_fr.png');
+global.imagen3 = fs.createReadStream('./src/menu_pt.png');
+global.imagen4 = fs.createReadStream('./src/menu_en.png');
+global.imagen5 = fs.createReadStream('./src/menu_ru.png');*/
+
+global.imagen1 = fs.readFileSync('./src/menu_es.png');
+global.imagen2 = fs.readFileSync('./src//menu_fr.png');
+global.imagen3 = fs.readFileSync('./src/menu_pt.png')
+global.imagen4 = fs.readFileSync('./src/menu_en.png')
+global.imagen5 = fs.readFileSync('./src/menu_ru.png')
 
 global.mods = [];
 
@@ -48,15 +56,16 @@ global.mes = d.toLocaleDateString('es', {month: 'long'});
 global.año = d.toLocaleDateString('es', {year: 'numeric'});
 global.tiempo = d.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true});
 //* ****************************
-global.wm2 = `${dia} ${fecha}\nBot`;
-global.gt = 'H Bot';
-global.mysticbot = 'H Bot';
+global.wm2 = `${dia} ${fecha}\nThe Mystic - Bot`;
+global.gt = 'The Mystic - Bot';
+global.mysticbot = 'The Mystic - Bot';
+global.channel = 'https://whatsapp.com/channel/0029VajKFjlJJhzU8fvTPn2L';
 global.md = 'https://github.com/santiyt65/-----';
-global.mysticbot = 'https://github.com/santiyt65/-----';
-global.waitt = '*⏳ Cargando Espere Un Momento...*';
-global.waittt = '*⏳ Cargando Espere Un Momento...*';
-global.waitttt = '*⏳ Cargando Espere Un Momento...*';
-global.nomorown = '5213331199136';
+global.mitsuribot = 'https://github.com/santiyt65/-----';
+global.waitt = '*_[ ⏳ ] Cargando..._*';
+global.waittt = '*_[ ⏳ ] Cargando..._*';
+global.waitttt = '*_[ ⏳ ] Cargando..._*';
+global.nomorown = '5219993404349';
 global.pdoc = ['application/vnd.openxmlformats-officedocument.presentationml.presentation', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/msword', 'application/pdf', 'text/rtf'];
 global.cmenut = '❖––––––『';
 global.cmenub = '┊✦ ';
@@ -73,7 +82,7 @@ global.comienzo = '• • ◕◕════';
 global.fin = '════◕◕ • •';
 global.botdate = `*[ 📅 ] Fecha:*  ${moment.tz('America/Mexico_City').format('DD/MM/YY')}`;
 global.bottime = `*[ ⏳ ] Hora:* ${moment.tz('America/Mexico_City').format('HH:mm:ss')}`;
-global.fgif = {key: {participant: '0@s.whatsapp.net'}, message: {'videoMessage': {'title': wm, 'h': `Hmm`, 'seconds': '999999999', 'gifPlayback': 'true', 'caption': bottime, 'jpegThumbnail': fs.readFileSync('./Menu.png')}}};
+global.fgif = {key: {participant: '0@s.whatsapp.net'}, message: {'videoMessage': {'title': wm, 'h': `Hmm`, 'seconds': '999999999', 'gifPlayback': 'true', 'caption': bottime, 'jpegThumbnail': fs.readFileSync('./src/assets/images/menu/languages/es/menu.png')}}};
 global.multiplier = 99;
 global.flaaa = [
   'https://flamingtext.com/net-fu/proxy_form.cgi?&imageoutput=true&script=water-logo&script=water-logo&fontsize=90&doScale=true&scaleWidth=800&scaleHeight=500&fontsize=100&fillTextColor=%23000&shadowGlowColor=%23000&backgroundColor=%23000&text=',
