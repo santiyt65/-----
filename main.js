@@ -81,7 +81,7 @@ global.loadDatabase = async function loadDatabase() {
 };
 loadDatabase();
 
-/* Creditos a santiyt65 (https://wa.me/542604604584) */
+/* Creditos a Otosaka (https://wa.me/51993966345) */
 
 global.chatgpt = new Low(new JSONFile(path.join(__dirname, '/db/chatgpt.json')));
 global.loadChatgptDB = async function loadChatgptDB() {
@@ -108,11 +108,11 @@ loadChatgptDB();
 
 /* ------------------------------------------------*/
 
-global.authFile = `GogetaSession`;
+global.authFile = `MysticSession`;
 const {state, saveState, saveCreds} = await useMultiFileAuthState(global.authFile);
 const msgRetryCounterMap = (MessageRetryMap) => { };
 const msgRetryCounterCache = new NodeCache()
-//const {version} = await fetchLatestBaileysVersion();
+const {version} = await fetchLatestBaileysVersion();
 let phoneNumber = global.botnumber
 
 const methodCodeQR = process.argv.includes("qr")
@@ -121,7 +121,7 @@ const MethodMobile = process.argv.includes("mobile")
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
 const question = (texto) => new Promise((resolver) => rl.question(texto, resolver))
 
-//Código adaptado para la compatibilidad de ser bot con el código de 8 digitos. Hecho por: https://github.com/santiyt65
+//Código adaptado para la compatibilidad de ser bot con el código de 8 digitos. Hecho por: https://github.com/GataNina-Li
 let opcion
 if (methodCodeQR) {
 opcion = '1'
@@ -143,7 +143,7 @@ const connectionOptions = {
 logger: pino({ level: 'silent' }),
 printQRInTerminal: opcion == '1' ? true : methodCodeQR ? true : false,
 mobile: MethodMobile, 
-browser: opcion == '1' ? ['GOGETA-BOT', 'Safari', '2.0.0'] : methodCodeQR ? ['GOGETA-BOT', 'Safari', '2.0.0'] : ['Ubuntu', 'Chrome', '20.0.04'],
+browser: opcion == '1' ? ['TheMystic-Bot-MD', 'Safari', '2.0.0'] : methodCodeQR ? ['TheMystic-Bot-MD', 'Safari', '2.0.0'] : ['Ubuntu', 'Chrome', '20.0.04'],
 auth: {
 creds: state.creds,
 keys: makeCacheableSignalKeyStore(state.keys, Pino({ level: "fatal" }).child({ level: "fatal" })),
@@ -158,7 +158,7 @@ return msg?.message || ""
 msgRetryCounterCache,
 msgRetryCounterMap,
 defaultQueryTimeoutMs: undefined,   
-version: [2, 2413, 1]
+version
 }
 
 global.conn = makeWASocket(connectionOptions);
@@ -274,13 +274,13 @@ fs.watch(dirToWatchccc, (eventType, filename) => {
 
 function purgeSession() {
 let prekey = []
-let directorio = readdirSync("./GogetaSession")
+let directorio = readdirSync("./MysticSession")
 let filesFolderPreKeys = directorio.filter(file => {
 return file.startsWith('pre-key-') /*|| file.startsWith('session-') || file.startsWith('sender-') || file.startsWith('app-') */
 })
 prekey = [...prekey, ...filesFolderPreKeys]
 filesFolderPreKeys.forEach(files => {
-unlinkSync(`./GogetaSession/${files}`)
+unlinkSync(`./MysticSession/${files}`)
 })
 } 
 
@@ -305,7 +305,7 @@ console.log(chalk.bold.red(`[ ℹ️ ] Algo salio mal durante la eliminación, a
 }}
 
 function purgeOldFiles() {
-const directories = ['./GogetaSession/', './jadibts/']
+const directories = ['./MysticSession/', './jadibts/']
 const oneHourAgo = Date.now() - (60 * 60 * 1000)
 directories.forEach(dir => {
 readdirSync(dir, (err, files) => {
@@ -346,7 +346,7 @@ if (opcion == '1' || methodCodeQR) {
   }
 let reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
 if (reason == 405) {
-await fs.unlinkSync("./GogetaSession/" + "creds.json")
+await fs.unlinkSync("./MysticSession/" + "creds.json")
 console.log(chalk.bold.redBright(`[ ⚠ ] Conexión replazada, Por favor espere un momento me voy a reiniciar...\nSi aparecen error vuelve a iniciar con : npm start`)) 
 process.send('reset')}
 if (connection === 'close') {
