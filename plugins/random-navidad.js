@@ -8,8 +8,8 @@ const handler = async (m, {
   command,
 }) => {
   const datas = global
-  const idioma = datas.db.data.users[m.sender].language
-  const _translate = JSON.parse(fs.readFileSync(`./language/${idioma}.json`))
+  const idioma = datas.db.data.users[m.sender].language || global.defaultLenguaje
+  const _translate = JSON.parse(fs.readFileSync(`./src/languages/${idioma}.json`))
   const tradutor = _translate.plugins.random_navidad
 
   const res = (await axios.get(`https://raw.githubusercontent.com/BrunoSobrino/TheMystic-Bot-MD/master/src/JSON/navidad.json`)).data;
@@ -22,7 +22,7 @@ const handler = async (m, {
   }, {
     quoted: m,
   });
-  // conn.sendButton(m.chat, `_Navidad 🧑‍🎄_`, author, GOGETA, [['🔄 𝚂𝙸𝙶𝚄𝙸𝙴𝙽𝚃𝙴 🔄', `${usedPrefix + command}`]], m)
+  // conn.sendButton(m.chat, `_Navidad 🧑‍🎄_`, author, mystic, [['🔄 𝚂𝙸𝙶𝚄𝙸𝙴𝙽𝚃𝙴 🔄', `${usedPrefix + command}`]], m)
 };
 handler.help = ['navidad'];
 handler.tags = ['internet'];

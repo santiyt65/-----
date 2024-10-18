@@ -1,16 +1,14 @@
-
 import axios from 'axios';
-
 
 let previousCommitSHA = '';
 let previousUpdatedAt = '';
 let previousCommitUser = ''; 
-const owner = 'santiyt65';
-const repo = 'GOGETA-BOT';
+const owner = 'BrunoSobrino';
+const repo = 'TheMystic-Bot-MD';
 const handler = async (m, {conn, text, usedPrefix, command}) => {
   const datas = global
-  const idioma = datas.db.data.users[m.sender].language
-  const _translate = JSON.parse(fs.readFileSync(`./language/${idioma}.json`))
+  const idioma = datas.db.data.users[m.sender].language || global.defaultLenguaje
+  const _translate = JSON.parse(fs.readFileSync(`./src/languages/${idioma}.json`))
   const tradutor = _translate.plugins.owner_actualizacion
 
  conn.sendMessage(m.chat, {text: tradutor.texto1}, {quoted: m});  

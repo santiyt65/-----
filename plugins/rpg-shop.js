@@ -1,37 +1,29 @@
-import {createHash} from 'crypto';
-import PhoneNumber from 'awesome-phonenumber';
-import fetch from 'node-fetch';
 
 
-const handler = async (m, {conn, usedPrefix, participants, isPrems}) => {
+const xpperlimit = 350;
+const handler = async (m, {conn, command, args}) => {
   const datas = global
-  const idioma = datas.db.data.users[m.sender].language
-  const _translate = JSON.parse(fs.readFileSync(`./language/${idioma}.json`))
-  const tradutor = _translate.plugins.rpg_perfil
+  const idioma = datas.db.data.users[m.sender].language || global.defaultLenguaje
+  const _translate = JSON.parse(fs.readFileSync(`./src/languages/${idioma}.json`))
+  const tradutor = _translate.plugins.rpg_shop
 
-  let pp = 'https://telegra.ph/file/06cc652844ea19e8aed1c.jpg';
-  const who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender;
-  if (!(who in global.db.data.users)) throw tradutor.texto1;
-  try {
-    pp = await conn.profilePictureUrl(who);
-  } catch (e) {
-  } finally {
-    const {name, limit, lastclaim, registered, regTime, age, premiumTime} = global.db.data.users[who];
-    const username = conn.getName(who);
-    const prem = global.prems.includes(who.split `@` [0]);
-    const sn = createHash('md5').update(who).digest('hex');
-    const str = `${tradutor.texto2[0]} ${username} ${registered ? '(' + name + ') ': ''}
-${tradutor.texto2[1]}  ${PhoneNumber('+' + who.replace('@s.whatsapp.net', '')).getNumber('international')}
-${tradutor.texto2[2]}  wa.me/${who.split`@`[0]}${registered ? tradutor.texto2[7] + age + tradutor.texto2[8] : ''}
-${tradutor.texto2[3]}  ${limit} ${tradutor.texto2[9]}
-${tradutor.texto2[4]}  ${registered ? tradutor.texto2[10] : tradutor.texto2[11]}
-${tradutor.texto2[5]}  ${premiumTime > 0 ? 'Si' : (isPrems ? tradutor.texto2[10] : tradutor.texto2[11]) || ''}
-${tradutor.texto2[6]}  
-${sn}`;
-    conn.sendMessage(m.chat, {image: {url: pp}, caption: str}, {quoted: m});
-  }
+  let count = command.replace(/^buy/i, '');
+  count = count ? /all/i.test(count) ? Math.floor(global.db.data.users[m.sender].exp / xpperlimit) : parseInt(count) : args[0] ? parseInt(args[0]) : 1;
+  count = Math.max(1, count);
+  if (global.db.data.users[m.sender].exp >= xpperlimit * count) {
+    global.db.data.users[m.sender].exp -= xpperlimit * count;
+    global.db.data.users[m.sender].limit += count;
+    conn.reply(m.chat, `
+${tradutor.texto1[0]}
+${tradutor.texto1[1]} : + ${count}💎 
+${tradutor.texto1[2]} -${xpperlimit * count} XP
+${tradutor.texto1[3]}`, m);
+  } else conn.reply(m.chat, `${tradutor.texto2} *${count}* ${tradutor.texto3}`, m);
 };
-handler.help = ['profile [@user]'];
+handler.help = ['Buy', 'Buyall'];
 handler.tags = ['xp'];
-handler.command = /^perfil|profile?$/i;
+handler.command = ['buy', 'buyall'];
+
+handler.disabled = false;
+
 export default handler;

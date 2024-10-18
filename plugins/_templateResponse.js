@@ -5,7 +5,7 @@ const {
   proto,
   generateWAMessage,
   areJidsSameUser,
-  decryptPollVote,
+  decryptPollVote
 } = (await import("baileys")).default;
 
 export async function all(m, chatUpdate) {

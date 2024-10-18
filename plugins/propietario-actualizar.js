@@ -3,8 +3,8 @@ import { execSync } from 'child_process';
 
 const handler = async (m, { conn, text }) => {
   const datas = global
-  const idioma = datas.db.data.users[m.sender].language
-  const _translate = JSON.parse(fs.readFileSync(`./language/${idioma}.json`))
+  const idioma = datas.db.data.users[m.sender].language || global.defaultLenguaje
+  const _translate = JSON.parse(fs.readFileSync(`./src/languages/${idioma}.json`))
   const tradutor = _translate.plugins.propietario_actualizar
 
   try {
@@ -22,7 +22,7 @@ const handler = async (m, { conn, text }) => {
           .split('\n')
           .filter(line => line.trim() !== '')
           .map(line => {
-            if (line.includes('.npm/') || line.includes('.cache/') || line.includes('tmp/') || line.includes('GogetaSession/') || line.includes('npm-debug.log')) {
+            if (line.includes('.npm/') || line.includes('.cache/') || line.includes('tmp/') || line.includes('MysticSession/') || line.includes('npm-debug.log')) {
               return null;
             }
             return '*→ ' + line.slice(3) + '*';
