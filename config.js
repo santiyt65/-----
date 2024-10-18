@@ -23,7 +23,7 @@ global.suittag = ['5219993404349'];
 global.prems = ['51995386439'];
 
 // API
-global.BASE_API_DELIRIUS = "https://deliriusapi-official.vercel.app";
+global.BASE_API_DELIRIUS = "https://deliriussapi-oficial.vercel.app";
 
 global.packname = 'Sticker';
 global.author = 'MITSURI-BOT-MD';

@@ -7,8 +7,6 @@ import fetch from 'node-fetch';
 import axios from 'axios';
 import moment from 'moment-timezone';
 
-/*AGRADECIMIENTO A BRUNOSBRINO*/
-
 /* Para agregar más APIs asegurate de poner global.apiname = ['APIKey'] */ /* By Skid 🤑 */
 
 global.openai_key = 'sk-0';
