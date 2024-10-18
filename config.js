@@ -6,7 +6,7 @@ import moment from 'moment-timezone';
 
 global.botnumber = ""
 global.confirmCode = ""
-global.authFile = `MysticSession`;
+global.authFile = `MITSURISession`;
 
 // Cambiar a true si el Bot responde a sus comandos con otros comandos.
 // Cambiar a false para usar el Bot desde el mismo numero del Bot.
@@ -39,11 +39,11 @@ global.imagen3 = fs.createReadStream('./src/menu_pt.png');
 global.imagen4 = fs.createReadStream('./src/menu_en.png');
 global.imagen5 = fs.createReadStream('./src/menu_ru.png');*/
 
-global.imagen1 = fs.readFileSync('./src/menu_es.png');
-global.imagen2 = fs.readFileSync('./src//menu_fr.png');
-global.imagen3 = fs.readFileSync('./src/menu_pt.png')
-global.imagen4 = fs.readFileSync('./src/menu_en.png')
-global.imagen5 = fs.readFileSync('./src/menu_ru.png')
+global.imagen1 = fs.readFileSync('Menu.png');
+global.imagen2 = fs.readFileSync('Menu2.jpg');
+global.imagen3 = fs.readFileSync('Menu3.png')
+global.imagen4 = fs.readFileSync('Menu4.jpg')
+global.imagen5 = fs.readFileSync('Menu5.png')
 
 global.mods = [];
 
