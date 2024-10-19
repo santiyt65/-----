@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import cheerio from 'cheerio';
+import cherio from 'cherio';
 
 
 const handler = async (m, {conn, args, command, usedPrefix}) => {

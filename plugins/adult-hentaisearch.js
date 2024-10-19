@@ -1,4 +1,4 @@
-import cheerio from 'cheerio';
+import cherio from 'cherio';
 import axios from 'axios';
 
 

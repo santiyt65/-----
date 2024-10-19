@@ -2,6 +2,7 @@ import {watchFile, unwatchFile} from 'fs';
 import chalk from 'chalk';
 import {fileURLToPath} from 'url';
 import fs from 'fs';
+import cherio from 'cherio';
 import fetch from 'node-fetch';
 import axios from 'axios';
 import moment from 'moment-timezone';
@@ -66,7 +67,7 @@ global.APIKeys = {
 };
 
 /** ************************/
-global.cheerio = cheerio;
+global.cherio = cherio;
 global.fs = fs;
 global.fetch = fetch;
 global.axios = axios;
