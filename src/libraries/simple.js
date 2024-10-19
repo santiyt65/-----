@@ -56,7 +56,7 @@ export function makeWASocket(connectionOptions, options = {}) {
           info(...args) {
             console.log(
                 chalk.bold.bgRgb(51, 204, 51)('INFO '),
-                `[${chalk.rgb(255, 255, 255)(new Date().toUTCString())}]:`,
+                `[${chalk.rgb(255, 255, 255)(new Date().toUTCString())}:`,
                 chalk.cyan(format(...args)),
             );
           },
